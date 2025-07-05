@@ -12,26 +12,31 @@ const authSection = document.getElementById("auth-section");
 const appContent = document.getElementById("app-content");
 
 signInBtn.addEventListener("click", async () => {
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email: emailInput.value,
     password: passwordInput.value,
   });
-  if (error) alert("Ошибка входа: " + error.message);
-  else checkAuth();
+
+  if (error) {
+    alert("Ошибка входа: " + error.message);
+  } else {
+    console.log("Успешный вход", data);
+    checkAuth();
+  }
 });
 
 signUpBtn.addEventListener("click", async () => {
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email: emailInput.value,
     password: passwordInput.value,
   });
-  if (error) alert("Ошибка регистрации: " + error.message);
-  else alert("Письмо с подтверждением отправлено");
-});
 
-signOutBtn.addEventListener("click", async () => {
-  await supabase.auth.signOut();
-  checkAuth();
+  if (error) {
+    alert("Ошибка регистрации: " + error.message);
+  } else {
+    console.log("Регистрация прошла успешно", data);
+    alert("Письмо с подтверждением отправлено");
+  }
 });
 
 async function checkAuth() {
